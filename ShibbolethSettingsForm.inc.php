@@ -10,7 +10,7 @@
  * @class ShibbolethSettingsForm
  * @ingroup plugins_generic_shibboleth
  *
- * @brief Form for journal managers to modify Shibboleth
+ * @brief Form for managers to modify Shibboleth
  * authentication plugin settings
  */
 
