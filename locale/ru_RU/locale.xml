@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
+
+<!--
+  * plugins/generic/shibboleth/locale/ru_RU/locale.xml
+  *
+  * Copyright (c) 2013-2017 Simon Fraser University
+  * Copyright (c) 2000-2017 John Willinsky
+  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+  *
+  * Localization information: https://pkp.sfu.ca/wiki/index.php?title=OJS:_Russian_(ru_RU)
+  * Localization strings.
+  -->
+ 
+<locale name="ru_RU" full_name="Русский">
+	<message key="plugins.generic.shibboleth.displayName">Модуль «Аутентификация Shibboleth»</message>
+	<message key="plugins.generic.shibboleth.description">Позволяет выполнять аутентификацию с помощью внешнего сервиса через службу Shibboleth.</message>
+
+	<!-- Управвление настройками Shibboleth -->
+	<message key="plugins.generic.shibboleth.manager.settings.description"><![CDATA[<p>Если этот модуль включен, можно использовать службу SSO Shibboleth для регистрации и аутентификации пользователей. Вы должны настроить и сконфигурировать локальный провайдер службы (SP).</p>]]></message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethWayfUrl">Путь службы Shibboleth</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethWayfUrlRequired">Пожалуйста, введите путь к службе обнаружения Shibboleth на этом сервере.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderUin">Заголовок с Shibboleth UIN</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderUinRequired">Пожалуйста введите заголовок, в котором находится Shibboleth UIN.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstName">Заголовок с именем пользователя Shibboleth</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstNameRequired">Пожалуйста введите заголовок, в котором находится имя пользователя Shibboleth.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastName">Заголовок с фамилией пользователя Shibboleth</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastNameRequired">Пожалуйста введите заголовок, в котором находится фамилия пользователя Shibboleth.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderInitials">Заголовок с личными инициалами пользователя Shibboleth</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmail">Заголовок с адресом электронной почты пользователя Shibboleth</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmailRequired">Пожалуйста введите заголовок, в котором находится адрес электронной почты пользователя Shibboleth.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderPhone">Заголовок с номером телефона пользователя Shibboleth</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderMailing">Заголовок с почтовым адресом пользователя Shibboleth</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethAdminUins">Список ID или UIN пользователей Shibboleth, являющихся администраторами OJS</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethAdminUinsRequired">Пожалуйста, введите хотя бы один UIN пользователя-администратора Shibboleth.</message>
+</locale>
