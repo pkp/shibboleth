@@ -103,7 +103,7 @@ class ShibbolethHandler extends Handler {
 
 		// We rely on these headers being present.
 		if (!isset($_SERVER[$uinHeader])) {
-			errog_log(
+			error_log(
 				"Shibboleth plugin enabled, but not properly configured; failed to find $uinHeader"
 			);
 			Validation::logout();
