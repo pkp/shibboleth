@@ -189,5 +189,3 @@ class ShibbolethSettingsForm extends Form {
 		);
 	}
 }
-
-?>

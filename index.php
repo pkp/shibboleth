@@ -18,5 +18,3 @@
 require_once('ShibbolethAuthPlugin.inc.php');
 
 return new ShibbolethAuthPlugin();
-
-?>

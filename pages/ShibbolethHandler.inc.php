@@ -430,4 +430,3 @@ class ShibbolethHandler extends Handler {
 		return $request->redirectUrl($shibUrl);
 	}
 }
-?>

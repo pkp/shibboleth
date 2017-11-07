@@ -248,5 +248,3 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		return false;
 	}
 }
-
-?>
