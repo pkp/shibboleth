@@ -15,4 +15,5 @@
 	<type>plugins.generic</type>
 	<release>0.1.0.0</release>
 	<date>2017-07-19</date>
+	<sitewide>1</sitewide>
 </version>
