@@ -30,56 +30,56 @@ class ShibbolethHandler extends Handler {
 	 * @return bool
 	 */
 	function activateUser($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+		return $this->_shibbolethRedirect($request);
 	}
 
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function changePassword($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+		return $this->_shibbolethRedirect($request);
 	}
 
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function index($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+		return $this->_shibbolethRedirect($request);
 	}
 
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function lostPassword($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+		return $this->_shibbolethRedirect($request);
 	}
 
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function register($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+		return $this->_shibbolethRedirect($request);
 	}
 
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function registerUser($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+		return $this->_shibbolethRedirect($request);
 	}
 
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function requestResetPassword($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+		return $this->_shibbolethRedirect($request);
 	}
 
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function savePassword($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+		return $this->_shibbolethRedirect($request);
 	}
 
 	/**
@@ -192,7 +192,7 @@ class ShibbolethHandler extends Handler {
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function signIn($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+		return $this->_shibbolethRedirect($request);
 	}
 
 	/**
@@ -217,8 +217,8 @@ class ShibbolethHandler extends Handler {
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
-	function validate($args, $request) {
-		return $this->_shibbolethRedirect($args, $request);
+	function validate($requiredContexts = null, $request = null) {
+		return $this->_shibbolethRedirect($request);
 	}
 
 
@@ -403,11 +403,10 @@ class ShibbolethHandler extends Handler {
 	/**
 	 * Intercept normal login/registration requests; defer to Shibboleth.
 	 * 
-	 * @param $args array
 	 * @param $request Request
 	 * @return bool
 	 */
-	function _shibbolethRedirect($args, $request) {
+	function _shibbolethRedirect($request) {
 		$this->_plugin = $this->_getPlugin();
 		$this->_contextId = $this->_plugin->getCurrentContextId();
 		$context = $this->getTargetContext($request);
