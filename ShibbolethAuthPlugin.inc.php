@@ -42,8 +42,8 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	/**
 	 * @copydoc Plugin::register()
 	 */
-	function register($category, $path) {
-		$success = parent::register($category, $path);
+	function register($category, $path, $mainContextId = null) {
+		$success = parent::register($category, $path, $mainContextId);
 		$this->addLocaleData();
 		if ($success && $this->getEnabled()) {
 			// Register pages to handle login.
