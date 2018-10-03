@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
+
+<!--
+  * plugins/generic/shibboleth/locale/ar_IQ/locale.xml
+  *
+  * Copyright (c) 2013-2018 Simon Fraser University
+  * Copyright (c) 2000-2018 John Willinsky
+  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+  *
+  * Localization strings for the ar_IQ (Arabic) locale.
+  *
+  -->
+ 
+<locale name="ar_IQ" full_name="العربية">
+	<message key="plugins.generic.shibboleth.displayName">إضافة مصادقة Shibboleth</message>
+	<message key="plugins.generic.shibboleth.description">هذه الإضافة تسمح بمصادقة طرف ثالث عبر خدمة Shibboleth.</message>
+
+	<!-- Shibboleth Settings Management -->
+	<message key="plugins.generic.shibboleth.manager.settings.description"><![CDATA[<p>مع تمكين هذه الإضافة، يمكن استعمال خدمة تسجيل منفردة من Shibboleth لأغراض مصادقة دخول المستخدمين إلى الموقع. لا بد لك أولاً من تهيئة مزود خدمة محلي وإعداده لتفعيل الخدمة.</p>]]></message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethWayfUrl">مسار مزود خدمة Shibboleth</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethWayfUrlRequired">لطفاً، أدخل مسار فاتح الطريق لخدمة Shibboleth في هذا الملقم.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderUin">العبارة التعريفية لمعرف Shibboleth UIN</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderUinRequired">لطفاً، أدخل العبارة التعريفية حيث يمكن العثور على معرف Shibboleth.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstName">العبارة التعريفية مع الاسم الأول أو الاسم المعطى لخدمة Shibboleth</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstNameRequired">لطفاً، أدخل العبارة التعريفية حيث يمكن العثور على الاسم المعطى لخدمة Shibboleth.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastName">العبارة التعريفية مع الاسم الأخير، اسم العائلة أو اللقب لخدمة Shibboleth</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastNameRequired">لطفاً، أدخل العبارة التعريفية حيث يمكن العثور على الاسم الأخير لخدمة Shibboleth.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderInitials">العبارة التعريفية مع الأحرف الأولى لخدمة Shibboleth</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmail">العبارة التعريفية مع عنوان البريد الالكتروني لخدمة Shibboleth</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmailRequired">لطفاً، أدخل العبارة التعريفية حيث يمكن العثور على عنوان البريد الالكتروني الأخير لخدمة Shibboleth.</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderPhone">العبارة التعريفية مع رقم الهاتف لخدمة Shibboleth</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethHeaderMailing">العبارة التعريفية مع عنوان البريد العادي لخدمة Shibboleth</message>
+
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethAdminUins">قائمة برموز أو معرفات مستخدمي Shibboleth والذين لديهم صلاحيات المشرفين في نظام المجلات المفتوحة</message>
+	<message key="plugins.generic.shibboleth.manager.settings.shibbolethAdminUinsRequired">لطفاً، أدخل على الأقل معرفاً واحداً لمشرف يستعمل خدمة Shibboleth.</message>
+</locale>
