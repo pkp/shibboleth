@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/shibboleth/ShibbolethAuthPlugin.inc.php
  *
- * Copyright (c) 2014-2017 Simon Fraser University
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2014-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
  * @class ShibbolethAuthPlugin
@@ -117,13 +117,6 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 				return new JSONMessage(true, $form->fetch($request));
 		}
 		return parent::manage($args, $request);
-	}
-
-	/**
-	 * @copydoc Plugin::getTemplatePath()
-	 */
-	function getTemplatePath($inCore = false) {
-		return parent::getTemplatePath($inCore) . 'templates/';
 	}
 
 	/**
