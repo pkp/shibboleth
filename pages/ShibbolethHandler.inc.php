@@ -370,8 +370,15 @@ class ShibbolethHandler extends Handler {
 		$user->setAuthStr($uin);
 		$user->setUsername($userEmail);
 		$user->setEmail($userEmail);
-		$user->setFirstName($userFirstName);
-		$user->setLastName($userLastName);
+
+		// Get the site primary locale, needed for setting the given name
+		// and family name of the user.
+		$request = Application::getRequest();
+		$site = $request->getSite();
+		$sitePrimaryLocale = $site->getPrimaryLocale();
+
+		$user->setGivenName($userFirstName, $sitePrimaryLocale);
+		$user->setFamilyName($userLastName, $sitePrimaryLocale);
 
 		if (!empty($userInitials)) {
 			$user->setInitials($userInitials);
