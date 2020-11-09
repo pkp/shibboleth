@@ -33,6 +33,11 @@
 		{fbvElement id="shibbolethAdminUinsSetting" type="text" name="shibbolethAdminUins" value=$shibbolethAdminUins label="plugins.generic.shibboleth.manager.settings.shibbolethAdminUins"}
 	{/fbvFormArea}
 
+        {fbvFormArea title="plugins.generic.shibboleth.manager.settings.shibbolethOptional"}
+                {fbvFormSection for="shibbolethOptionalSetting" list=true description="plugins.generic.shibboleth.manager.settings.shibbolethOptionalDescription"}
+                        {fbvElement id="shibbolethOptional" type="checkbox" value="1" checked=$shibbolethOptional label="plugins.generic.shibboleth.manager.settings.shibbolethOptionalLabel"}
+                {/fbvFormSection}
+        {/fbvFormArea}
 	{fbvFormButtons}
 
 	<p><span class="formRequired">{translate key="common.requiredField"}</span></p>

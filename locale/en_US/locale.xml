@@ -42,4 +42,8 @@
 
 	<message key="plugins.generic.shibboleth.manager.settings.shibbolethAdminUins">List of Shibboleth user IDs or UINs who are OJS administrators</message>
 	<message key="plugins.generic.shibboleth.manager.settings.shibbolethAdminUinsRequired">Please enter at least one administrator’s Shibboleth UIN.</message>
+        
+        <message key="plugins.generic.shibboleth.manager.settings.shibbolethOptional">Optional Shibboleth Login</message>
+        <message key="plugins.generic.shibboleth.manager.settings.shibbolethOptionalDescription">Selecting this option gives user the option of logging in with either a local account or a Shibboleth account. This is useful if your journal will have guest users who don't have a Shibboleth account but would still like to contribute.</message>
+        <message key="plugins.generic.shibboleth.manager.settings.shibbolethOptionalLabel">Optional Shibboleth Login</message>
 </locale>

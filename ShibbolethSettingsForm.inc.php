@@ -101,6 +101,7 @@ class ShibbolethSettingsForm extends Form {
 			'shibbolethHeaderPhone' => $this->_plugin->getSetting($this->_contextId, 'shibbolethHeaderPhone'),
 			'shibbolethHeaderMailing' => $this->_plugin->getSetting($this->_contextId, 'shibbolethHeaderMailing'),
 			'shibbolethAdminUins' => $this->_plugin->getSetting($this->_contextId, 'shibbolethAdminUins'),
+			'shibbolethOptional' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptional'),
 		);
 	}
 
@@ -117,6 +118,7 @@ class ShibbolethSettingsForm extends Form {
 		$this->readUserVars(array('shibbolethHeaderPhone'));
 		$this->readUserVars(array('shibbolethHeaderMailing'));
 		$this->readUserVars(array('shibbolethAdminUins'));
+		$this->readUserVars(array('shibbolethOptional'));
 	}
 
 	/**
@@ -186,6 +188,12 @@ class ShibbolethSettingsForm extends Form {
 			'shibbolethAdminUins',
 			trim($this->getData('shibbolethAdminUins'), "\"\';"),
 			'string'
-		);
+                );
+		$this->_plugin->updateSetting(
+			$this->_contextId,
+			'shibbolethOptional',
+			$this->getData('shibbolethOptional'),
+                        'bool'
+                );
 	}
 }
