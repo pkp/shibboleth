@@ -22,6 +22,9 @@ class ShibbolethHandler extends Handler {
 	/** @var int */
 	var $_contextId;
 
+	/** @var bool */
+	var $_shibbolethOptional;
+
 	/**
 	 * Intercept normal login/registration requests; defer to Shibboleth.
 	 * 
@@ -43,9 +46,49 @@ class ShibbolethHandler extends Handler {
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
-	function index($args, $request) {
-		return $this->_shibbolethRedirect($request);
-	}
+        function index($args, $request) {
+		$this->_plugin = $this->_getPlugin();
+                $this->_shibbolethOptional= $this->_plugin->getSetting(
+                        $this->_contextId,
+                        'shibbolethOptional'
+                );
+
+                if ( $this->_shibbolethOptional ) {
+                        
+                        $this->setupTemplate($request);
+                        if (Validation::isLoggedIn()) {
+                                $this->sendHome($request);
+                        }
+
+                        if (Config::getVar('security', 'force_login_ssl') && $request->getProtocol() != 'https') {
+                                // Force SSL connections for login
+                                $request->redirectSSL();
+                        }
+
+                        $sessionManager = SessionManager::getManager();
+                        $session = $sessionManager->getUserSession();
+
+                        $templateMgr = TemplateManager::getManager($request);
+                        $templateMgr->assign(array(
+                                'loginMessage' => $request->getUserVar('loginMessage'),
+                                'username' => $session->getSessionVar('username'),
+                                'remember' => $request->getUserVar('remember'),
+                                'source' => $request->getUserVar('source'),
+                                'showRemember' => Config::getVar('general', 'session_lifetime') > 0,
+                        ));
+
+                        // For force_login_ssl with base_url[...]: make sure SSL used for login form
+                        $loginUrl = $request->url(null, 'login', 'signIn');
+                        if (Config::getVar('security', 'force_login_ssl')) {
+                                $loginUrl = PKPString::regexp_replace('/^http:/', 'https:', $loginUrl);
+                        }
+                        $templateMgr->assign('loginUrl', $loginUrl);
+                        $templateMgr->assign('shibbolethLoginUrl', $this->_shibbolethLoginUrl($request));
+                        $templateMgr->display($this->_plugin->getTemplateResource('optionalShibbolethLogin.tpl'));
+                } else {
+                        return $this->_shibbolethRedirect($request);
+                }
+        }
 
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
@@ -191,7 +234,57 @@ class ShibbolethHandler extends Handler {
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
-	function signIn($args, $request) {
+        function signIn($args, $request) {
+		$this->_plugin = $this->_getPlugin();
+                $this->_shibbolethOptional= $this->_plugin->getSetting(
+                        $this->_contextId,
+                        'shibbolethOptional'
+                );
+
+                if ( $this->_shibbolethOptional ) {
+                        $this->setupTemplate($request);
+                        if (Validation::isLoggedIn()) $this->sendHome($request);
+
+                        if (Config::getVar('security', 'force_login_ssl') && $request->getProtocol() != 'https') {
+                                // Force SSL connections for login
+                                $request->redirectSSL();
+                        }
+
+                        $user = Validation::login($request->getUserVar('username'), $request->getUserVar('password'), $reason, $request->getUserVar('remember') == null ? false : true);
+                        if ($user !== false) {
+                                if ($user->getMustChangePassword()) {
+                                        // User must change their password in order to log in
+                                        Validation::logout();
+                                        $request->redirect(null, null, 'changePassword', $user->getUsername());
+
+                                } else {
+                                        $source = $request->getUserVar('source');
+                                        $redirectNonSsl = Config::getVar('security', 'force_login_ssl') && !Config::getVar('security', 'force_ssl');
+                                        if (preg_match('#^/\w#', $source) === 1) {
+                                                $request->redirectUrl($source);
+                                        }
+                                        if ($redirectNonSsl) {
+                                                $request->redirectNonSSL();
+                                        } else {
+                                                $this->_redirectAfterLogin($request);
+                                        }
+                                }
+
+                        } else {
+                                $sessionManager = SessionManager::getManager();
+                                $session = $sessionManager->getUserSession();
+                                $templateMgr = TemplateManager::getManager($request);
+                                $templateMgr->assign(array(
+                                        'username' => $request->getUserVar('username'),
+                                        'remember' => $request->getUserVar('remember'),
+                                        'source' => $request->getUserVar('source'),
+                                        'showRemember' => Config::getVar('general', 'session_lifetime') > 0,
+                                        'error' => $reason===null?'user.login.loginError':($reason===''?'user.login.accountDisabled':'user.login.accountDisabledWithReason'),
+                                        'reason' => $reason,
+                                ));
+                                $templateMgr->display('frontend/pages/userLogin.tpl');
+                        }
+                }
 		return $this->_shibbolethRedirect($request);
 	}
 
@@ -242,7 +335,8 @@ class ShibbolethHandler extends Handler {
 	 * 
 	 * @param $user User
 	 */
-	function _checkAdminStatus($user) {
+        function _checkAdminStatus($user) {
+
 		$adminsStr = $this->_plugin->getSetting(
 			$this->_contextId,
 			'shibbolethAdminUins'
@@ -414,6 +508,16 @@ class ShibbolethHandler extends Handler {
 	 * @return bool
 	 */
 	function _shibbolethRedirect($request) {
+		return $request->redirectUrl($this->_shibbolethLoginUrl($request));
+	}
+        
+	/**
+	 * Generate Shibboleth Request Url
+	 * 
+	 * @param $request Request
+	 * @return string
+	 */
+	function _shibbolethLoginUrl($request) {
 		$this->_plugin = $this->_getPlugin();
 		$this->_contextId = $this->_plugin->getCurrentContextId();
 		$context = $this->getTargetContext($request);
@@ -432,7 +536,6 @@ class ShibbolethHandler extends Handler {
 			null,
 			true
 		);
-		$shibUrl = $wayfUrl . '?target=' . $shibLoginUrl;
-		return $request->redirectUrl($shibUrl);
+		return $wayfUrl . '?target=' . $shibLoginUrl;
 	}
 }
