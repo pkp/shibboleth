@@ -28,13 +28,11 @@
         <h2>
                 Institutional Login
         </h2>
-        <div class="buttons">
-                <a href="{$shibbolethLoginUrl}">
-                        <button>
-                                Institutional Login
-                        </button>
-                </a>
-        </div>
+        <a href="{$shibbolethLoginUrl}">
+                <button class="cmp_button">
+                        Institutional Login
+                </button>
+        </a>
 
         <h2>
                 Local Login
