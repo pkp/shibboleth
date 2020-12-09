@@ -102,6 +102,9 @@ class ShibbolethSettingsForm extends Form {
 			'shibbolethHeaderMailing' => $this->_plugin->getSetting($this->_contextId, 'shibbolethHeaderMailing'),
 			'shibbolethAdminUins' => $this->_plugin->getSetting($this->_contextId, 'shibbolethAdminUins'),
 			'shibbolethOptional' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptional'),
+			'shibbolethOptionalTitle' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptionalTitle'),
+			'shibbolethOptionalDescription' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptionalDescription'),
+			'shibbolethOptionalButtonLabel' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptionalButtonLabel'),
 		);
 	}
 
@@ -119,6 +122,9 @@ class ShibbolethSettingsForm extends Form {
 		$this->readUserVars(array('shibbolethHeaderMailing'));
 		$this->readUserVars(array('shibbolethAdminUins'));
 		$this->readUserVars(array('shibbolethOptional'));
+		$this->readUserVars(array('shibbolethOptionalTitle'));
+		$this->readUserVars(array('shibbolethOptionalDescription'));
+		$this->readUserVars(array('shibbolethOptionalButtonLabel'));
 	}
 
 	/**
@@ -194,6 +200,24 @@ class ShibbolethSettingsForm extends Form {
 			'shibbolethOptional',
 			$this->getData('shibbolethOptional'),
                         'bool'
+                );
+		$this->_plugin->updateSetting(
+			$this->_contextId,
+			'shibbolethOptionalTitle',
+			trim($this->getData('shibbolethOptionalTitle'), "\"\';"),
+			'string'
+                );
+		$this->_plugin->updateSetting(
+			$this->_contextId,
+			'shibbolethOptionalButtonLabel',
+			trim($this->getData('shibbolethOptionalButtonLabel'), "\"\';"),
+			'string'
+                );
+		$this->_plugin->updateSetting(
+			$this->_contextId,
+			'shibbolethOptionalDescription',
+			trim($this->getData('shibbolethOptionalDescription'), "\"\';"),
+			'string'
                 );
 	}
 }

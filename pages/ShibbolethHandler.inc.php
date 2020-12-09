@@ -52,9 +52,25 @@ class ShibbolethHandler extends Handler {
                         $this->_contextId,
                         'shibbolethOptional'
                 );
+                $this->_shibbolethOptionalTitle = $this->_plugin->getSetting(
+                        $this->_contextId,
+                        'shibbolethOptionalTitle'
+                );
+                $this->_shibbolethOptionalButtonLabel = $this->_plugin->getSetting(
+                        $this->_contextId,
+                        'shibbolethOptionalButtonLabel'
+                );
+                $this->_shibbolethOptionalDescription = $this->_plugin->getSetting(
+                        $this->_contextId,
+                        'shibbolethOptionalDescription'
+                );
 
                 if ( $this->_shibbolethOptional ) {
-                        
+                        /**
+                         * This section is based off the code found in
+                         * pkp-lib's LoginHandler.inc.php
+                         * https://github.com/pkp/pkp-lib/blob/f64f302f8bef4f6c2e40275af717884c643f995b/pages/login/LoginHandler.inc.php#L37-L68
+                         */
                         $this->setupTemplate($request);
                         if (Validation::isLoggedIn()) {
                                 $this->sendHome($request);
@@ -71,7 +87,7 @@ class ShibbolethHandler extends Handler {
                         $templateMgr = TemplateManager::getManager($request);
                         $templateMgr->assign(array(
                                 'loginMessage' => $request->getUserVar('loginMessage'),
-                                'username' => $session->getSessionVar('username'),
+                                'username' => $request->getUserVar('username'),
                                 'remember' => $request->getUserVar('remember'),
                                 'source' => $request->getUserVar('source'),
                                 'showRemember' => Config::getVar('general', 'session_lifetime') > 0,
@@ -84,6 +100,9 @@ class ShibbolethHandler extends Handler {
                         }
                         $templateMgr->assign('loginUrl', $loginUrl);
                         $templateMgr->assign('shibbolethLoginUrl', $this->_shibbolethLoginUrl($request));
+                        $templateMgr->assign('shibbolethTitle', $this->_shibbolethOptionalTitle);
+                        $templateMgr->assign('shibbolethButtonLabel', $this->_shibbolethOptionalButtonLabel);
+                        $templateMgr->assign('shibbolethDescription', $this->_shibbolethOptionalDescription);
                         $templateMgr->display($this->_plugin->getTemplateResource('optionalShibbolethLogin.tpl'));
                 } else {
                         return $this->_shibbolethRedirect($request);
@@ -143,6 +162,10 @@ class ShibbolethHandler extends Handler {
 			$this->_contextId,
 			'shibbolethHeaderEmail'
 		);
+                
+		foreach($_SERVER as $key => $value){
+	           error_log($key . ":" . $value);
+	        }
 
 		// We rely on these headers being present.
 		if (!isset($_SERVER[$uinHeader])) {
@@ -242,6 +265,11 @@ class ShibbolethHandler extends Handler {
                 );
 
                 if ( $this->_shibbolethOptional ) {
+                        /**
+                         * This section is based off the code found in
+                         * pkp-lib's LoginHandler.inc.php
+                         * https://github.com/pkp/pkp-lib/blob/f64f302f8bef4f6c2e40275af717884c643f995b/pages/login/LoginHandler.inc.php#L90-L133
+                         */
                         $this->setupTemplate($request);
                         if (Validation::isLoggedIn()) $this->sendHome($request);
 
@@ -271,8 +299,6 @@ class ShibbolethHandler extends Handler {
                                 }
 
                         } else {
-                                $sessionManager = SessionManager::getManager();
-                                $session = $sessionManager->getUserSession();
                                 $templateMgr = TemplateManager::getManager($request);
                                 $templateMgr->assign(array(
                                         'username' => $request->getUserVar('username'),
@@ -536,6 +562,6 @@ class ShibbolethHandler extends Handler {
 			null,
 			true
 		);
-		return $wayfUrl . '?target=' . $shibLoginUrl;
+		return "/" . $wayfUrl . '?target=' . $shibLoginUrl;
 	}
 }

@@ -26,11 +26,23 @@
 	{/if}
 
         <h2>
-                Institutional Login
+                {if $shibbolethTitle !== ""}
+                        {$shibbolethTitle}
+                {else}
+                        Institutional Login
+                {/if}
+
         </h2>
+        {if shibbolethDescription !== ""}
+                <p>{$shibbolethDescription}</p>
+        {/if}
         <a href="{$shibbolethLoginUrl}">
                 <button class="cmp_button">
-                        Institutional Login
+                        {if $shibbolethButtonLabel !== ""}
+                                {$shibbolethButtonLabel}
+                        {else}
+                                Institutional Login
+                        {/if}
                 </button>
         </a>
 

@@ -30,6 +30,9 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	/** @var bool */
 	var $_globallyEnabled;
 
+	/** @var bool */
+	var $_singleContext;
+
 	/**
 	 * @copydoc Plugin::__construct()
 	 */
@@ -37,15 +40,27 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		parent::__construct();
 		$this->_contextId = $this->getCurrentContextId();
 		$this->_globallyEnabled = $this->getSetting(0, 'enabled');
+                $this->_singleContext = true;
+                $contextDao = Application::getContextDAO();
+                $workingContexts = $contextDao->getAvailable();
+                if ($workingContexts && $workingContexts->getCount() > 1) {
+                        $this->_singleContext = false;
+                }
+                if ($this->_singleContext) {
+                        $this->_contextId = CONTEXT_SITE;
+                }
 	}
 
 	/**
 	 * @copydoc Plugin::register()
 	 */
 	function register($category, $path, $mainContextId = null) {
+                if ($this->_singleContext) {
+                        $mainContextId = CONTEXT_SITE;
+                }
 		$success = parent::register($category, $path, $mainContextId);
 		$this->addLocaleData();
-		if ($success && $this->getEnabled()) {
+		if ($success && $this->getEnabled($mainContextId)) {
 			// Register pages to handle login.
 			HookRegistry::register(
 				'LoadHandler',
@@ -123,8 +138,8 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	 * @copydoc Plugin::getSetting()
 	 */
 	function getSetting($contextId, $name) {
-		if ($this->_globallyEnabled) {
-			return parent::getSetting(0, $name);
+		if ($this->_globallyEnabled || $this->_singleContext) {
+			return parent::getSetting(CONTEXT_SITE, $name);
 		} else {
 			return parent::getSetting($contextId, $name);
 		}
@@ -193,6 +208,22 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		$this->updateSetting($this->_contextId, 'enabled', $enabled, 'bool');
 	}
 
+        /**
+         * Override LazyLoadPlugin::getEnabled() to allow for enabling of
+         * this sitewide plugin within an individual context
+         * @param $contextId integer
+         * @return boolean
+         */
+       	function getEnabled($contextId = null) {
+		if ($contextId === null) {
+			$contextId = $this->getCurrentContextId();
+		}
+		// LazyLoadPlugin::getEnabled just asks if this is a site plugin above
+		if ($this->_globallyEnabled || $this->_singleContext) {
+			$contextId = CONTEXT_SITE;
+		}
+		return $this->getSetting($contextId, 'enabled');
+	} 
 
 	//
 	// Callback handler

@@ -37,6 +37,9 @@
                 {fbvFormSection for="shibbolethOptionalSetting" list=true description="plugins.generic.shibboleth.manager.settings.shibbolethOptionalDescription"}
                         {fbvElement id="shibbolethOptional" type="checkbox" value="1" checked=$shibbolethOptional label="plugins.generic.shibboleth.manager.settings.shibbolethOptionalLabel"}
                 {/fbvFormSection}
+		{fbvElement id="shibbolethOptionalTitle" type="text" name="shibbolethOptionalTitle" value=$shibbolethOptionalTitle label="plugins.generic.shibboleth.manager.settings.shibbolethOptionalTitle"}
+		{fbvElement id="shibbolethOptionalButtonLabel" type="text" name="shibbolethOptionalButtonLabel" value=$shibbolethOptionalButtonLabel label="plugins.generic.shibboleth.manager.settings.shibbolethOptionalButtonLabel"}
+		{fbvElement id="shibbolethOptionalDescription" type="text" name="shibbolethOptionalDescription" value=$shibbolethOptionalDescription label="plugins.generic.shibboleth.manager.settings.shibbolethOptionalDescriptionForLogin"}
         {/fbvFormArea}
 	{fbvFormButtons}
 
