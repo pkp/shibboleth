@@ -91,6 +91,7 @@ class ShibbolethHandler extends Handler {
 			if (Config::getVar('security', 'force_login_ssl')) {
 				$loginUrl = PKPString::regexp_replace('/^http:/', 'https:', $loginUrl);
 			}
+			$templateMgr->assign('loginUrl', $loginUrl);
 			$templateMgr->display('frontend/pages/userLogin.tpl');
 		} else {
 			return $this->_shibbolethRedirect($request);
