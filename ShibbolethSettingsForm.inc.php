@@ -103,7 +103,8 @@ class ShibbolethSettingsForm extends Form {
 			'shibbolethAdminUins' => $this->_plugin->getSetting($this->_contextId, 'shibbolethAdminUins'),
 			'shibbolethOptional' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptional'),
 			'shibbolethOptionalTitle' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptionalTitle'),
-			'shibbolethOptionalDescription' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptionalDescription'),
+			'shibbolethOptionalLoginDescription' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptionalLoginDescription'),
+			'shibbolethOptionalRegistrationDescription' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptionalRegistrationDescription'),
 			'shibbolethOptionalButtonLabel' => $this->_plugin->getSetting($this->_contextId, 'shibbolethOptionalButtonLabel'),
 		);
 	}
@@ -123,7 +124,8 @@ class ShibbolethSettingsForm extends Form {
 		$this->readUserVars(array('shibbolethAdminUins'));
 		$this->readUserVars(array('shibbolethOptional'));
 		$this->readUserVars(array('shibbolethOptionalTitle'));
-		$this->readUserVars(array('shibbolethOptionalDescription'));
+		$this->readUserVars(array('shibbolethOptionalLoginDescription'));
+		$this->readUserVars(array('shibbolethOptionalRegistrationDescription'));
 		$this->readUserVars(array('shibbolethOptionalButtonLabel'));
 	}
 
@@ -194,30 +196,36 @@ class ShibbolethSettingsForm extends Form {
 			'shibbolethAdminUins',
 			trim($this->getData('shibbolethAdminUins'), "\"\';"),
 			'string'
-                );
+								);
 		$this->_plugin->updateSetting(
 			$this->_contextId,
 			'shibbolethOptional',
 			$this->getData('shibbolethOptional'),
-                        'bool'
-                );
+			'bool'
+		);
 		$this->_plugin->updateSetting(
 			$this->_contextId,
 			'shibbolethOptionalTitle',
-			trim($this->getData('shibbolethOptionalTitle'), "\"\';"),
+			$this->getData('shibbolethOptionalTitle'),
 			'string'
-                );
+		);
 		$this->_plugin->updateSetting(
 			$this->_contextId,
 			'shibbolethOptionalButtonLabel',
-			trim($this->getData('shibbolethOptionalButtonLabel'), "\"\';"),
+			$this->getData('shibbolethOptionalButtonLabel'),
 			'string'
-                );
+		);
 		$this->_plugin->updateSetting(
 			$this->_contextId,
-			'shibbolethOptionalDescription',
-			trim($this->getData('shibbolethOptionalDescription'), "\"\';"),
+			'shibbolethOptionalLoginDescription',
+			$this->getData('shibbolethOptionalLoginDescription'),
 			'string'
-                );
+		);
+		$this->_plugin->updateSetting(
+			$this->_contextId,
+			'shibbolethOptionalRegistrationDescription',
+			$this->getData('shibbolethOptionalRegistrationDescription'),
+			'string'
+		);
 	}
 }

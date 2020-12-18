@@ -30,9 +30,6 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	/** @var bool */
 	var $_globallyEnabled;
 
-	/** @var bool */
-	var $_singleContext;
-
 	/**
 	 * @copydoc Plugin::__construct()
 	 */
@@ -40,32 +37,20 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		parent::__construct();
 		$this->_contextId = $this->getCurrentContextId();
 		$this->_globallyEnabled = $this->getSetting(0, 'enabled');
-                $this->_singleContext = true;
-                $contextDao = Application::getContextDAO();
-                $workingContexts = $contextDao->getAvailable();
-                if ($workingContexts && $workingContexts->getCount() > 1) {
-                        $this->_singleContext = false;
-                }
-                if ($this->_singleContext) {
-                        $this->_contextId = CONTEXT_SITE;
-                }
 	}
 
 	/**
 	 * @copydoc Plugin::register()
 	 */
 	function register($category, $path, $mainContextId = null) {
-                if ($this->_singleContext) {
-                        $mainContextId = CONTEXT_SITE;
-                }
 		$success = parent::register($category, $path, $mainContextId);
 		$this->addLocaleData();
-		if ($success && $this->getEnabled($mainContextId)) {
+		if ($success && $this->getEnabled()) {
 			// Register pages to handle login.
-			HookRegistry::register(
-				'LoadHandler',
-				array($this, 'handleRequest')
-			);
+			HookRegistry::register('LoadHandler',	array($this, 'handleRequest'));
+
+			// Register callback for smarty filters
+			HookRegistry::register('TemplateManager::display', array($this, 'handleTemplateDisplay'));
 		}
 		return $success;
 	}
@@ -138,8 +123,8 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	 * @copydoc Plugin::getSetting()
 	 */
 	function getSetting($contextId, $name) {
-		if ($this->_globallyEnabled || $this->_singleContext) {
-			return parent::getSetting(CONTEXT_SITE, $name);
+		if ($this->_globallyEnabled) {
+			return parent::getSetting(0, $name);
 		} else {
 			return parent::getSetting($contextId, $name);
 		}
@@ -208,22 +193,6 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		$this->updateSetting($this->_contextId, 'enabled', $enabled, 'bool');
 	}
 
-        /**
-         * Override LazyLoadPlugin::getEnabled() to allow for enabling of
-         * this sitewide plugin within an individual context
-         * @param $contextId integer
-         * @return boolean
-         */
-       	function getEnabled($contextId = null) {
-		if ($contextId === null) {
-			$contextId = $this->getCurrentContextId();
-		}
-		// LazyLoadPlugin::getEnabled just asks if this is a site plugin above
-		if ($this->_globallyEnabled || $this->_singleContext) {
-			$contextId = CONTEXT_SITE;
-		}
-		return $this->getSetting($contextId, 'enabled');
-	} 
 
 	//
 	// Callback handler
@@ -270,5 +239,145 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Hook callback: register output filter for user registration 
+	 *
+	 * @param $hookName string
+	 * @param $args array
+	 * @return bool
+	 * @see TemplateManager::display()
+	 *
+	 */
+	function handleTemplateDisplay($hookName, $args) {
+		$templateMgr =& $args[0];
+		$template =& $args[1];
+		$request = PKPApplication::get()->getRequest();
+
+		switch ($template) {
+			case 'frontend/pages/userRegister.tpl':
+				$templateMgr->registerFilter("output", array($this, 'registrationFilter'));
+				break;
+			case 'frontend/pages/userLogin.tpl':
+				$templateMgr->registerFilter("output", array($this, 'loginFilter'));
+				break;
+		}
+		return false;
+	}
+	
+	function registrationFilter($output, $templateMgr) {
+		$isRegistration = True;
+		return $this->registrationAndLoginFilter($output, $templateMgr, $isRegistration);
+	}
+
+	function loginFilter($output, $templateMgr) {
+		$isRegistration = False;
+		return $this::registrationAndLoginFilter($output, $templateMgr, $isRegistration);
+	}
+	
+	/**
+	 * Output filter adds Shibboleth interaction to registration and login form.
+	 *
+	 * @param $output string
+	 * @param $templateMgr TemplateManager
+	 * @param $isRegistration boolean
+	 * @return string
+	 */
+	function registrationAndLoginFilter($output, $templateMgr, $isRegistration) {
+		if ($isRegistration) {
+			$htmlId = "register";
+		} else {
+			$htmlId = "login";
+		}
+		error_log('/<form[^>]+id="' . $htmlId . '"[^>]+>/');
+		if (preg_match('/<form[^>]+id="' . $htmlId . '"[^>]+>/', $output, $matches, PREG_OFFSET_CAPTURE)) {
+			error_log("Running");
+			$this->_plugin = $this->_getPlugin();
+			$this->_shibbolethOptionalTitle = $this->_plugin->getSetting(
+				$this->_contextId,
+				'shibbolethOptionalTitle'
+			);
+			$this->_shibbolethOptionalButtonLabel = $this->_plugin->getSetting(
+				$this->_contextId,
+				'shibbolethOptionalButtonLabel'
+			);
+			if ($isRegistration) {
+				$this->_shibbolethOptionalDescription = $this->_plugin->getSetting(
+					$this->_contextId,
+					'shibbolethOptionalRegistrationDescription'
+				);
+			} else {
+				$this->_shibbolethOptionalDescription = $this->_plugin->getSetting(
+					$this->_contextId,
+					'shibbolethOptionalLoginDescription'
+				);
+			}
+			$match = $matches[0][0];
+			$offset = $matches[0][1];
+			$request = Application::get()->getRequest();
+
+			$templateMgr->assign('shibbolethLoginUrl', $this->_shibbolethLoginUrl($request));
+			$templateMgr->assign('shibbolethTitle', $this->_shibbolethOptionalTitle);
+			$templateMgr->assign('shibbolethButtonLabel', $this->_shibbolethOptionalButtonLabel);
+			$templateMgr->assign('shibbolethDescription', $this->_shibbolethOptionalDescription);
+			$templateMgr->assign('isRegistration', $isRegistration);
+
+			$newOutput = substr($output, 0, $offset + strlen($match));
+			$newOutput .= $templateMgr->fetch($this->getTemplateResource('shibbolethProfile.tpl'));
+			$newOutput .= substr($output, $offset + strlen($match));
+			$output = $newOutput;
+			$templateMgr->unregisterFilter('output', array($this, 'registrationFilter'));
+		}
+		return $output;
+	}
+
+
+	//
+	// Private helper methods
+	//
+	/**
+	 * Get the Shibboleth plugin object
+	 * 
+	 * @return ShibbolethAuthPlugin
+	 */
+	function _getPlugin() {
+		$plugin = PluginRegistry::getPlugin('generic', SHIBBOLETH_PLUGIN_NAME);
+		return $plugin;
+	}
+
+	/**
+	 * Generate Shibboleth Request Url
+	 *
+	 * @param $request Request
+	 * @return string
+	 */
+	function _shibbolethLoginUrl($request) {
+		$this->_plugin = $this->_getPlugin();
+		$this->_contextId = $this->_plugin->getCurrentContextId();
+		$router = $request->getRouter();
+
+		$wayfUrl = $this->_plugin->getSetting(
+			$this->_contextId,
+			'shibbolethWayfUrl'
+		);
+		$shibLoginUrl = $router->url(
+			$request,
+			null,
+			'shibboleth',
+			'shibLogin',
+			null,
+			null,
+			true
+		);
+		return "/" . $wayfUrl . '?target=' . $shibLoginUrl;
+	}
+
+	function _isShibbolethOptional() {
+		$this->_plugin = $this->_getPlugin();
+		return $this->_plugin->getSetting(
+			$this->_contextId,
+			'shibbolethOptional'
+		);
 	}
 }
