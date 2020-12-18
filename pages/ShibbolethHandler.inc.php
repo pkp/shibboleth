@@ -627,7 +627,7 @@ class ShibbolethHandler extends Handler {
 			null,
 			true
 		);
-		return "/" . $wayfUrl . '?target=' . $shibLoginUrl;
+		return $wayfUrl . '?target=' . $shibLoginUrl;
 	}
 
 	function _isShibbolethOptional() {
