@@ -290,9 +290,7 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		} else {
 			$htmlId = "login";
 		}
-		error_log('/<form[^>]+id="' . $htmlId . '"[^>]+>/');
 		if (preg_match('/<form[^>]+id="' . $htmlId . '"[^>]+>/', $output, $matches, PREG_OFFSET_CAPTURE)) {
-			error_log("Running");
 			$this->_plugin = $this->_getPlugin();
 			$this->_shibbolethOptionalTitle = $this->_plugin->getSetting(
 				$this->_contextId,
@@ -370,7 +368,7 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 			null,
 			true
 		);
-		return "/" . $wayfUrl . '?target=' . $shibLoginUrl;
+		return $wayfUrl . '?target=' . $shibLoginUrl;
 	}
 
 	function _isShibbolethOptional() {
