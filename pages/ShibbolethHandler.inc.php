@@ -426,8 +426,7 @@ class ShibbolethHandler extends Handler {
 	 *
 	 * @param $user User
 	 */
-  function _checkAdminStatus($user) {
-
+	function _checkAdminStatus($user) {
 		$adminsStr = $this->_plugin->getSetting(
 			$this->_contextId,
 			'shibbolethAdminUins'
