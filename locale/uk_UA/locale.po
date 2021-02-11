@@ -1,0 +1,66 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-02-11T02:08:10+00:00\n"
+"PO-Revision-Date: 2021-02-11T02:08:10+00:00\n"
+"Language: \n"
+
+msgid "plugins.generic.shibboleth.displayName"
+msgstr "Модуль аутентифікації Shibboleth"
+
+msgid "plugins.generic.shibboleth.description"
+msgstr "Дозволяє виконувати аутентифікацію з допомогою зовнішнього сервісу Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.description"
+msgstr "<p>Если этот модуль включен, можно использовать службу SSO Shibboleth для регистрации и аутентификации пользователей. Вы должны настроить и сконфигурировать локальный провайдер службы (SP).</p>"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethWayfUrl"
+msgstr "Шлях до сервісу Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethWayfUrlRequired"
+msgstr "Будь ласка, введіть посилання до сервісу виявлення Shibboleth на цьому сервері."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderUin"
+msgstr "Заголовок з Shibboleth UIN"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderUinRequired"
+msgstr "Будь ласка, введіть заголовок, в якому міститься Shibboleth UIN."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstName"
+msgstr "Заголовок з іменем користувача Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstNameRequired"
+msgstr "Будь ласка, введіть заголовок, в якому міститься ім'я користувача Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastName"
+msgstr "Заголовок з прізвищем користувача Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastNameRequired"
+msgstr "Будь ласка, введіть заголовок, в якому міститься прізвище користувача Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderInitials"
+msgstr "Заголовок з особистими ініціалами користувача Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmail"
+msgstr "Заголовок з електронною адресою користувача Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmailRequired"
+msgstr "Будь ласка, введіть заголовок, в якому міститься електронна адреса користувача Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderPhone"
+msgstr "Заголовок з номером телефона користувача Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderMailing"
+msgstr "Заголовок з поштовою адресою користувача Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethAdminUins"
+msgstr "Список ID або UIN користувачів Shibboleth, що є адміністраторами OJS"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethAdminUinsRequired"
+msgstr "Будь ласка, введіть хоча б один UIN користувача-адміністратора Shibboleth."

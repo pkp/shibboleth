@@ -1,0 +1,66 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-02-11T02:08:10+00:00\n"
+"PO-Revision-Date: 2021-02-11T02:08:10+00:00\n"
+"Language: \n"
+
+msgid "plugins.generic.shibboleth.displayName"
+msgstr "Módulo de autenticación Shibboleth"
+
+msgid "plugins.generic.shibboleth.description"
+msgstr "Este módulo permite la autenticación de terceros mediante el servicio Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.description"
+msgstr "<p>With this plugin enabled, a Shibboleth single sign-on service can be used to register and authenticate users. You must have set up and configured the local service provider (SP).</p>"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethWayfUrl"
+msgstr "Ruta Shibboleth SP"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethWayfUrlRequired"
+msgstr "Ingrese la ruta del servicio de Shibboleth wayfinder en este servidor."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderUin"
+msgstr "Encabezado con Shibboleth UIN"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderUinRequired"
+msgstr "Ingrese el encabezado en el que se encuentra el Shibboleth UIN."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstName"
+msgstr "Encabezado con Shibboleth primero o el nombre dado"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstNameRequired"
+msgstr "Por favor, ingrese el encabezado en el que se encuentra el nombre dado a Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastName"
+msgstr "Encabezado con el último Shibboleth, familia o apellido"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastNameRequired"
+msgstr "Por favor, ingrese el encabezado en el que se encuentra el apellido Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderInitials"
+msgstr "Encabezado con iniciales personales Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmail"
+msgstr "Encabezado con dirección de correo electrónico Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmailRequired"
+msgstr "Por favor ingrese el encabezado en el que se encuentra la dirección de correo electrónico  Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderPhone"
+msgstr "Encabezado con número teléfonico Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderMailing"
+msgstr "Encabezado con dirección postal Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethAdminUins"
+msgstr "Lista de IDs de usuarios Shibboleth o UINs que son administradores OJS"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethAdminUinsRequired"
+msgstr "Por favor ingrese al menos el UIN Shibboleth de un administrador."
