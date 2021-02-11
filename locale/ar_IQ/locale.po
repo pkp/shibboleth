@@ -1,0 +1,66 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-02-11T02:08:10+00:00\n"
+"PO-Revision-Date: 2021-02-11T02:08:10+00:00\n"
+"Language: \n"
+
+msgid "plugins.generic.shibboleth.displayName"
+msgstr "إضافة مصادقة Shibboleth"
+
+msgid "plugins.generic.shibboleth.description"
+msgstr "هذه الإضافة تسمح بمصادقة طرف ثالث عبر خدمة Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.description"
+msgstr "<p>مع تمكين هذه الإضافة، يمكن استعمال خدمة تسجيل منفردة من Shibboleth لأغراض مصادقة دخول المستخدمين إلى الموقع. لا بد لك أولاً من تهيئة مزود خدمة محلي وإعداده لتفعيل الخدمة.</p>"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethWayfUrl"
+msgstr "مسار مزود خدمة Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethWayfUrlRequired"
+msgstr "لطفاً، أدخل مسار فاتح الطريق لخدمة Shibboleth في هذا الملقم."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderUin"
+msgstr "العبارة التعريفية لمعرف Shibboleth UIN"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderUinRequired"
+msgstr "لطفاً، أدخل العبارة التعريفية حيث يمكن العثور على معرف Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstName"
+msgstr "العبارة التعريفية مع الاسم الأول أو الاسم المعطى لخدمة Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstNameRequired"
+msgstr "لطفاً، أدخل العبارة التعريفية حيث يمكن العثور على الاسم المعطى لخدمة Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastName"
+msgstr "العبارة التعريفية مع الاسم الأخير، اسم العائلة أو اللقب لخدمة Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastNameRequired"
+msgstr "لطفاً، أدخل العبارة التعريفية حيث يمكن العثور على الاسم الأخير لخدمة Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderInitials"
+msgstr "العبارة التعريفية مع الأحرف الأولى لخدمة Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmail"
+msgstr "العبارة التعريفية مع عنوان البريد الالكتروني لخدمة Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmailRequired"
+msgstr "لطفاً، أدخل العبارة التعريفية حيث يمكن العثور على عنوان البريد الالكتروني الأخير لخدمة Shibboleth."
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderPhone"
+msgstr "العبارة التعريفية مع رقم الهاتف لخدمة Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethHeaderMailing"
+msgstr "العبارة التعريفية مع عنوان البريد العادي لخدمة Shibboleth"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethAdminUins"
+msgstr "قائمة برموز أو معرفات مستخدمي Shibboleth والذين لديهم صلاحيات المشرفين في نظام المجلات المفتوحة"
+
+msgid "plugins.generic.shibboleth.manager.settings.shibbolethAdminUinsRequired"
+msgstr "لطفاً، أدخل على الأقل معرفاً واحداً لمشرف يستعمل خدمة Shibboleth."
