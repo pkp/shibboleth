@@ -16,12 +16,11 @@
 		<p>{$shibbolethDescription}</p>
 	{/if}
 	<a href="{$shibbolethLoginUrl}" class="cmp_button">
-			{if trim($shibbolethButtonLabel) != ""}
-				{$shibbolethButtonLabel}
-			{else}
-				{translate key="plugins.generic.shibboleth.manager.settings.InstitutionalLogin"}
-			{/if}
-		</button>
+		{if trim($shibbolethButtonLabel) != ""}
+			{$shibbolethButtonLabel}
+		{else}
+			{translate key="plugins.generic.shibboleth.manager.settings.InstitutionalLogin"}
+		{/if}
 	</a>
 </div>
 <h2>
