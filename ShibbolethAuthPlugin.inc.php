@@ -36,7 +36,10 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	function __construct() {
 		parent::__construct();
 		$this->_contextId = $this->getCurrentContextId();
-		$this->_globallyEnabled = $this->getSetting(0, 'enabled');
+		$this->_globallyEnabled = $this->getSetting(CONTEXT_SITE, 'enabled');
+		if ($this->_globallyEnabled) {
+			$this->_contextId = CONTEXT_SITE;
+		}
 	}
 
 	/**
@@ -124,7 +127,7 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	 */
 	function getSetting($contextId, $name) {
 		if ($this->_globallyEnabled) {
-			return parent::getSetting(0, $name);
+			return parent::getSetting(CONTEXT_SITE, $name);
 		} else {
 			return parent::getSetting($contextId, $name);
 		}
@@ -176,14 +179,14 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	 * @copydoc LazyLoadPlugin::getCanEnable()
 	 */
 	function getCanEnable() {
-		return !$this->_globallyEnabled || $this->_contextId == 0;
+		return !$this->_globallyEnabled || $this->_contextId == CONTEXT_SITE;
 	}
 
 	/**
 	 * @copydoc LazyLoadPlugin::getCanDisable()
 	 */
 	function getCanDisable() {
-		return !$this->_globallyEnabled || $this->_contextId == 0;
+		return !$this->_globallyEnabled || $this->_contextId == CONTEXT_SITE;
 	}
 
 	/**
@@ -192,6 +195,15 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	function setEnabled($enabled) {
 		$this->updateSetting($this->_contextId, 'enabled', $enabled, 'bool');
 	}
+	/**
+	 * Determine whether or not this plugin is currently enabled.
+	 * @param $contextId integer is ignored
+	 * @return boolean
+	 */
+	function getEnabled($contextId = null) {
+		return $this->getSetting($this->_contextId, 'enabled');
+	}
+
 
 
 	//
