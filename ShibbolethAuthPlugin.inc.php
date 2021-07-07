@@ -30,6 +30,7 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	/** @var bool */
 	var $_globallyEnabled;
 
+	var $settingsRequired = ["shibbolethWayfUrl","shibbolethHeaderUin","shibbolethHeaderFirstName","shibbolethHeaderEmail"];
 	/**
 	 * @copydoc Plugin::__construct()
 	 */
@@ -48,7 +49,7 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	function register($category, $path, $mainContextId = null) {
 		$success = parent::register($category, $path, $mainContextId);
 		$this->addLocaleData();
-		if ($success && $this->getEnabled()) {
+		if ($success && $this->getEnabled() && $this->isShibbolethConfigured()) {
 			// Register pages to handle login.
 			HookRegistry::register('LoadHandler',	array($this, 'handleRequest'));
 
@@ -204,7 +205,19 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		return $this->getSetting($this->_contextId, 'enabled');
 	}
 
-
+        /**
+         * @copydoc Plugin::isShibbolethConfigured()
+         * Determine whether or not this plugin is currently configured.
+         * @return boolean
+         */
+        function isShibbolethConfigured() {
+		foreach($this->settingsRequired as $setting){
+			if ($this->getSetting($this->_contextId, $setting)==null){
+				return false;
+			}
+		}
+		return true;
+        }
 
 	//
 	// Callback handler

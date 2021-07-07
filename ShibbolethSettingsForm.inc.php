@@ -35,54 +35,16 @@ class ShibbolethSettingsForm extends Form {
 
 		parent::__construct($plugin->getTemplateResource('settingsForm.tpl'));
 
-		$this->addCheck(
-			new FormValidator(
-				$this,
-				'shibbolethWayfUrl',
-				'required',
-				'plugins.generic.shibboleth.manager.settings.shibbolethWayfUrlRequired'
-			)
-		);
-		$this->addCheck(
-			new FormValidator(
-				$this,
-				'shibbolethHeaderUin',
-				'required',
-				'plugins.generic.shibboleth.manager.settings.shibbolethHeaderUinRequired'
-			)
-		);
-		$this->addCheck(
-			new FormValidator(
-				$this,
-				'shibbolethHeaderFirstName',
-				'required',
-				'plugins.generic.shibboleth.manager.settings.shibbolethHeaderFirstNameRequired'
-			)
-		);
-		$this->addCheck(
-			new FormValidator(
-				$this,
-				'shibbolethHeaderLastName',
-				'required',
-				'plugins.generic.shibboleth.manager.settings.shibbolethHeaderLastNameRequired'
-			)
-		);
-		$this->addCheck(
-			new FormValidator(
-				$this,
-				'shibbolethHeaderEmail',
-				'required',
-				'plugins.generic.shibboleth.manager.settings.shibbolethHeaderEmailRequired'
-			)
-		);
-		$this->addCheck(
-			new FormValidator(
-				$this,
-				'shibbolethAdminUins',
-				'required',
-				'plugins.generic.shibboleth.manager.settings.shibbolethAdminUinsRequired'
-			)
-		);
+		foreach($this->_plugin->settingsRequired as $setting){
+			$this->addCheck(
+				new FormValidator(
+					$this,
+					$setting,
+					'required',
+					'plugins.generic.shibboleth.manager.settings.' . $setting . 'Required'
+				)
+			);
+		}
 		$this->addCheck(new FormValidatorPost($this));
 		$this->addCheck(new FormValidatorCSRF($this));
 	}
