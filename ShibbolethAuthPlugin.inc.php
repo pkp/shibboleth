@@ -30,7 +30,7 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	/** @var bool */
 	var $_globallyEnabled;
 
-	var $settingsRequired = ["shibbolethWayfUrl","shibbolethHeaderUin","shibbolethHeaderFirstName","shibbolethHeaderEmail"];
+	var $settingsRequired = ["shibbolethWayfUrl", "shibbolethHeaderUin", "shibbolethHeaderFirstName", "shibbolethHeaderEmail"];
 	/**
 	 * @copydoc Plugin::__construct()
 	 */
@@ -211,8 +211,8 @@ class ShibbolethAuthPlugin extends GenericPlugin {
          * @return boolean
          */
         function isShibbolethConfigured() {
-		foreach($this->settingsRequired as $setting){
-			if ($this->getSetting($this->_contextId, $setting)==null){
+		foreach ($this->settingsRequired as $setting){
+			if ($this->getSetting($this->_contextId, $setting) == null) {
 				return false;
 			}
 		}

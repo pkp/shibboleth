@@ -35,7 +35,7 @@ class ShibbolethSettingsForm extends Form {
 
 		parent::__construct($plugin->getTemplateResource('settingsForm.tpl'));
 
-		foreach($this->_plugin->settingsRequired as $setting){
+		foreach ($this->_plugin->settingsRequired as $setting) {
 			$this->addCheck(
 				new FormValidator(
 					$this,
