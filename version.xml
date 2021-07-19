@@ -13,8 +13,8 @@
 <version>
 	<application>shibboleth</application>
 	<type>plugins.generic</type>
-	<release>1.1.0.0</release>
-	<date>2021-04-26</date>
+	<release>1.2.0.0</release>
+	<date>2021-07-19</date>
 	<lazy-load>1</lazy-load>
 	<sitewide>1</sitewide>
 	<class>ShibbolethAuthPlugin</class>
