@@ -7,7 +7,7 @@ With this plugin enabled, a Shibboleth single sign-on service can be used to reg
 * OJS 3.2 or later
 * Shibboleth SP installed within the webserver
   * Your Shibboleth SP must be installed and configured to export Shibboleth attributes to environment variables exposed to the webserver
-  * Minimal attributes required are: user id, email, given name, and surname
+  * Minimal attributes required are: user id, email, and given name
 
 ## Installation
 
