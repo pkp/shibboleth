@@ -548,11 +548,17 @@ class ShibbolethHandler extends Handler {
 		$userInitials = isset($_SERVER[$initialsHeader]) ? $_SERVER[$initialsHeader] : null;
 		$userPhone = isset($_SERVER[$phoneHeader]) ? $_SERVER[$phoneHeader] : null;
 		$userMailing = isset($_SERVER[$mailingHeader]) ? $_SERVER[$mailingHeader] : null;
+		
+		// create a username from e-mail
+		$userName = explode('@', $userEmail)[0];
+		
+		// replace all special chars (including underscores, for consistency) with "-"
+		$userName = preg_replace('/[^A-Za-z0-9\-]/', "-", $userName);
 
 		$userDao = DAORegistry::getDAO('UserDAO');
 		$user = $userDao->newDataObject();
 		$user->setAuthStr($uin);
-		$user->setUsername($userEmail);
+		$user->setUsername($userName); // TODO: currently throws an error if a user with same name already exists
 		$user->setEmail($userEmail);
 
 		// Get the site primary locale, needed for setting the given name
@@ -573,18 +579,23 @@ class ShibbolethHandler extends Handler {
 			$user->setMailingAddress($userMailing);
 		}
 
+		// set username as temporary password
+		// TODO: set the "MustChangePassword" variable
 		$user->setDateRegistered(Core::getCurrentDate());
 		$user->setPassword(
 			Validation::encryptCredentials(
-				Validation::generatePassword(40),
-				Validation::generatePassword(40)
+				$userName,
+				$userName
 			)
 		);
+		
+		
 
 		$userDao->insertObject($user);
 		$userId = $user->getId();
 		if ($userId) {
 			return $user;
+			
 		} else {
 			return null;
 		}
