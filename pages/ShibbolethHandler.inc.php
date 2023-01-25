@@ -538,9 +538,9 @@ class ShibbolethHandler extends Handler {
 		$uin = $_SERVER[$uinHeader];
 		$userEmail = $_SERVER[$emailHeader];
 		$userFirstName = $_SERVER[$firstNameHeader];
-		$userLastName = $_SERVER[$lastNameHeader];
+		
 
-		if (empty($uin) || empty($userEmail) || empty($userFirstName) || empty($userLastName)) {
+		if (empty($uin) || empty($userEmail) || empty($userFirstName)) {
 			error_log("Shibboleth failed to find required fields for new user");
 		}
 
@@ -562,7 +562,6 @@ class ShibbolethHandler extends Handler {
 		$sitePrimaryLocale = $site->getPrimaryLocale();
 
 		$user->setGivenName($userFirstName, $sitePrimaryLocale);
-		$user->setFamilyName($userLastName, $sitePrimaryLocale);
 
 		if (!empty($userInitials)) {
 			$user->setInitials($userInitials);
