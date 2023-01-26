@@ -548,6 +548,7 @@ class ShibbolethHandler extends Handler {
 		$userInitials = isset($_SERVER[$initialsHeader]) ? $_SERVER[$initialsHeader] : null;
 		$userPhone = isset($_SERVER[$phoneHeader]) ? $_SERVER[$phoneHeader] : null;
 		$userMailing = isset($_SERVER[$mailingHeader]) ? $_SERVER[$mailingHeader] : null;
+		$userLastName = isset($_SERVER[$lastNameHeader]) ? $_SERVER[$lastNameHeader] : null;
 
 		$userDao = DAORegistry::getDAO('UserDAO');
 		$user = $userDao->newDataObject();
@@ -562,7 +563,10 @@ class ShibbolethHandler extends Handler {
 		$sitePrimaryLocale = $site->getPrimaryLocale();
 
 		$user->setGivenName($userFirstName, $sitePrimaryLocale);
-
+		
+		if (!empty($userLastName)) {
+			$user->setFamilyName($userLastName, $sitePrimaryLocale);
+		}
 		if (!empty($userInitials)) {
 			$user->setInitials($userInitials);
 		}
@@ -571,7 +575,8 @@ class ShibbolethHandler extends Handler {
 		}
 		if (!empty($userMailing)) {
 			$user->setMailingAddress($userMailing);
-		}
+		}		
+		
 
 		$user->setDateRegistered(Core::getCurrentDate());
 		$user->setPassword(
