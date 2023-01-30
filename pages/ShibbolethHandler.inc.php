@@ -103,7 +103,7 @@ class ShibbolethHandler extends Handler {
 	 */
 	
 	// Use lostPassword function from LoginHandler instead of _shibbolethRedirect
-	// Otherwise there would always a redirect to Shib Sign-in 
+	// Otherwise there would always be a redirect to Shib Sign-in 
 	function lostPassword($args, $request) {
 			                $this->setupTemplate($request);
 			                $templateMgr = TemplateManager::getManager($request);
@@ -222,7 +222,7 @@ class ShibbolethHandler extends Handler {
 	 */
 	
 	/**
-	 * From Login Handler to avoid constant redirect to Shib Login
+	 * From Login Handler - to avoid constant redirect to Shib Login
 	 * Send a request to reset a user's password
 	 */
 	function requestResetPassword($args, $request) {
@@ -266,7 +266,7 @@ class ShibbolethHandler extends Handler {
 	 */
 
 	/**
-	 * From Login Handler to avoid constant redirect to Shib Login
+	 * From Login Handler - to avoid constant redirect to Shib Login
 	 * Save user's new password.
 	 */
 	function savePassword($args, $request) {
@@ -291,7 +291,7 @@ class ShibbolethHandler extends Handler {
 
 	/**
 	 * From LoginHandler
-	 Send the user "home" (typically to the dashboard, but that may not
+	 * Send the user "home" (typically to the dashboard, but that may not
 	 * always be available).
 	 * @param $request PKPRequest
 	 */
