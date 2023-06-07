@@ -102,12 +102,9 @@ class ShibbolethHandler extends Handler {
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	
-	// Use lostPassword function from LoginHandler instead of _shibbolethRedirect
-	// Otherwise there would always be a redirect to Shib Sign-in 
-	function lostPassword($args, $request) {
-			                $this->setupTemplate($request);
-			                $templateMgr = TemplateManager::getManager($request);
-			                $templateMgr->display('frontend/pages/userLostPassword.tpl');
+	
+	function lostPassword($args, $request) {	                
+		return $this->_shibbolethRedirect($request);
 	}
 
 
@@ -204,60 +201,11 @@ class ShibbolethHandler extends Handler {
 
 
 
-    /**
-    * Helper function from LoginHandler- set mail From
-    * can be overriden by child classes
-    * @param $request PKPRequest
-    * @param MailTemplate $mail
-    * @param $site Site
-    */
-    function _setMailFrom($request, $mail, $site) {
-		$mail->setReplyTo($site->getLocalizedContactEmail(), $site->getLocalizedContactName());
-        return true;
-    }
-
-
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
-	
-	/**
-	 * From Login Handler - to avoid constant redirect to Shib Login
-	 * Send a request to reset a user's password
-	 */
 	function requestResetPassword($args, $request) {
-			$this->setupTemplate($request);
-			$templateMgr = TemplateManager::getManager($request);
-
-			$email = $request->getUserVar('email');
-			$userDao = DAORegistry::getDAO('UserDAO'); /* @var $userDao UserDAO */
-			$user = $userDao->getUserByEmail($email);
-
-			if ($user == null || ($hash = Validation::generatePasswordResetHash($user->getId())) == false) {
-					$templateMgr->assign('error', 'user.login.lostPassword.invalidUser');
-					$templateMgr->display('frontend/pages/userLostPassword.tpl');
-
-			} else {
-					// Send email confirming password reset
-					import('lib.pkp.classes.mail.MailTemplate');
-					$mail = new MailTemplate('PASSWORD_RESET_CONFIRM');
-					$site = $request->getSite();
-					$this->_setMailFrom($request, $mail, $site);
-					$mail->assignParams([
-							'url' => $request->url(null, 'login', 'resetPassword', $user->getUsername(), array('confirm' => $hash)),
-							'siteTitle' => htmlspecialchars($site->getLocalizedTitle()),
-					]);
-					$mail->addRecipient($user->getEmail(), $user->getFullName());
-					$mail->send();
-
-					$templateMgr->assign(array(
-							'pageTitle' => 'user.login.resetPassword',
-							'message' => 'user.login.lostPassword.confirmationSent',
-							'backLink' => $request->url(null, $request->getRequestedPage()),
-							'backLinkLabel' => 'user.login',
-					));
-					$templateMgr->display('frontend/pages/message.tpl');
-			}
+			return $this->_shibbolethRedirect($request);
 	}
                                                                                               
 
@@ -265,42 +213,10 @@ class ShibbolethHandler extends Handler {
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 
-	/**
-	 * From Login Handler - to avoid constant redirect to Shib Login
-	 * Save user's new password.
-	 */
 	function savePassword($args, $request) {
-			$this->_isBackendPage = true;
-			$this->setupTemplate($request);
-
-			import('lib.pkp.classes.user.form.LoginChangePasswordForm');
-
-			$passwordForm = new LoginChangePasswordForm($request->getSite());
-			$passwordForm->readInputData();
-
-			if ($passwordForm->validate()) {
-					if ($passwordForm->execute()) {
-							$user = Validation::login($passwordForm->getData('username'), $passwordForm->getData('password'), $reason);
-					}
-					$this->sendHome($request);
-			} else {
-					$passwordForm->display($request);
-			}
+			return $this->_shibbolethRedirect($request);
 	}
 
-
-	/**
-	 * From LoginHandler
-	 * Send the user "home" (typically to the dashboard, but that may not
-	 * always be available).
-	 * @param $request PKPRequest
-	 */
-	protected function sendHome($request) {
-			if ($request->getContext()) $request->redirect(null, 'submissions');
-			else $request->redirect(null, 'user');
-	}
-
-	
 
 	/**
 	 * Login handler; receives post-validation Shibboleth redirect.
