@@ -16,6 +16,7 @@
  */
 
 import('lib.pkp.classes.plugins.GenericPlugin');
+define('SHIBBOLETH_PLUGIN_NAME', 'ShibbolethAuthPlugin');
 
 class ShibbolethAuthPlugin extends GenericPlugin {
 	// @@@ TODO: Is there a way to disable delete and upgrade actions
@@ -230,7 +231,7 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	function handleRequest($hookName, $params) {
 		$page = $params[0];
 		$op = $params[1];
-		if ($this->getEnabled()
+		if ($this->getEnabled() && !($this->_isShibbolethOptional())
 			&& ($page == 'shibboleth'
 				|| ($page == 'login'
 					&& array_search(
@@ -260,9 +261,39 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		) {
 			$this->import('pages/ShibbolethHandler');
 			define('HANDLER_CLASS', 'ShibbolethHandler');
-			define('SHIBBOLETH_PLUGIN_NAME', $this->getName());
 			return true;
 		}
+		
+		
+		else if ($this->getEnabled() && $this->_isShibbolethOptional()
+			&& ($page == 'shibboleth'
+				|| ($page == 'login'
+					&& array_search(
+						$op,
+						array(	
+							'index',
+							'signIn',
+							'signOut',
+						)
+					))
+				|| ($page == 'user'
+					&& array_search(
+						$op,
+						array(
+							'activateUser',
+							'register',
+							'registerUser',
+							'validate',
+						)
+					)
+				)
+			)
+		) {
+			$this->import('pages/ShibbolethHandler');
+			define('HANDLER_CLASS', 'ShibbolethHandler');
+			return true;
+		}
+		
 		return false;
 	}
 
