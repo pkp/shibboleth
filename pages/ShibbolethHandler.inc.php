@@ -101,7 +101,7 @@ class ShibbolethHandler extends Handler {
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
-	function lostPassword($args, $request) {
+	function lostPassword($args, $request) {	                
 		return $this->_shibbolethRedirect($request);
 	}
 
@@ -202,7 +202,7 @@ class ShibbolethHandler extends Handler {
 	function requestResetPassword($args, $request) {
 		return $this->_shibbolethRedirect($request);
 	}
-
+                                                                                              
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */

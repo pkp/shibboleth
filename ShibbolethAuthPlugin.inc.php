@@ -16,6 +16,7 @@
  */
 
 import('lib.pkp.classes.plugins.GenericPlugin');
+define('SHIBBOLETH_PLUGIN_NAME', 'ShibbolethAuthPlugin');
 
 class ShibbolethAuthPlugin extends GenericPlugin {
 	// @@@ TODO: Is there a way to disable delete and upgrade actions
@@ -230,20 +231,20 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	function handleRequest($hookName, $params) {
 		$page = $params[0];
 		$op = $params[1];
+		
+		// modify user login
+		$loginOps = ['index', 'signIn', 'signOut'];
+		if (!$this->_isShibbolethOptional()) {
+			// If Shibboleth is required, override password functionality
+			$loginOps = array_merge($loginOps, ['changePassword', 'lostPassword', 'requestResetPassword', 'savePassword']);
+		}
+		
 		if ($this->getEnabled()
 			&& ($page == 'shibboleth'
 				|| ($page == 'login'
 					&& array_search(
 						$op,
-						array(
-							'changePassword',
-							'index',
-							'lostPassword',
-							'requestResetPassword',
-							'savePassword',
-							'signIn',
-							'signOut',
-						)
+						$loginOps
 					))
 				|| ($page == 'user'
 					&& array_search(
@@ -260,7 +261,6 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		) {
 			$this->import('pages/ShibbolethHandler');
 			define('HANDLER_CLASS', 'ShibbolethHandler');
-			define('SHIBBOLETH_PLUGIN_NAME', $this->getName());
 			return true;
 		}
 		return false;
