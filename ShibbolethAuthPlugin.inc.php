@@ -231,20 +231,20 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	function handleRequest($hookName, $params) {
 		$page = $params[0];
 		$op = $params[1];
-		if ($this->getEnabled() && !($this->_isShibbolethOptional())
+		
+		// modify user login
+		$loginOps = ['index', 'signIn', 'signOut'];
+		if (!$this->_isShibbolethOptional()) {
+			// If Shibboleth is required, override password functionality
+			$loginOps = array_merge($loginOps, ['changePassword', 'lostPassword', 'requestResetPassword', 'savePassword']);
+		}
+		
+		if ($this->getEnabled()
 			&& ($page == 'shibboleth'
 				|| ($page == 'login'
 					&& array_search(
 						$op,
-						array(
-							'changePassword',
-							'index',
-							'lostPassword',
-							'requestResetPassword',
-							'savePassword',
-							'signIn',
-							'signOut',
-						)
+						$loginOps
 					))
 				|| ($page == 'user'
 					&& array_search(
@@ -263,37 +263,6 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 			define('HANDLER_CLASS', 'ShibbolethHandler');
 			return true;
 		}
-		
-		
-		else if ($this->getEnabled() && $this->_isShibbolethOptional()
-			&& ($page == 'shibboleth'
-				|| ($page == 'login'
-					&& array_search(
-						$op,
-						array(	
-							'index',
-							'signIn',
-							'signOut',
-						)
-					))
-				|| ($page == 'user'
-					&& array_search(
-						$op,
-						array(
-							'activateUser',
-							'register',
-							'registerUser',
-							'validate',
-						)
-					)
-				)
-			)
-		) {
-			$this->import('pages/ShibbolethHandler');
-			define('HANDLER_CLASS', 'ShibbolethHandler');
-			return true;
-		}
-		
 		return false;
 	}
 
