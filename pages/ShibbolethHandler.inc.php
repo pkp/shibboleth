@@ -281,7 +281,7 @@ class ShibbolethHandler extends Handler {
 		$userDao = DAORegistry::getDAO('UserDAO');
 		$user = $userDao->getUserByAuthStr($uin, true);
 		if (isset($user)) {
-			syslog(LOG_INFO, "Shibboleth located returning user $uin");
+			error_log(LOG_INFO, "Shibboleth located returning user $uin");
 		} else {
 			// We use the e-mail as a key.
 			if (empty($userEmail)) {
@@ -295,7 +295,7 @@ class ShibbolethHandler extends Handler {
 			$user = $userDao->getUserByEmail($userEmail);
 
 			if (isset($user)) {
-				syslog(LOG_INFO, "Shibboleth located returning email $userEmail");
+				error_log(LOG_INFO, "Shibboleth located returning email $userEmail");
 
 				if ($user->getAuthStr() != "") {
 					error_log(
