@@ -22,6 +22,16 @@ class ShibbolethHandler extends Handler {
 	/** @var int */
 	var $_contextId;
 
+	/** @var bool */
+	var $_shibbolethOptional;
+
+	/** @var string */
+	var $_shibbolethOptionalTitle;
+	/** @var string */
+	var $_shibbolethOptionalButtonLabel;
+	/** @var string */
+	var $_shibbolethOptionalDescription;
+
 	/**
 	* Intercept normal login/registration requests; defer to Shibboleth.
 	*

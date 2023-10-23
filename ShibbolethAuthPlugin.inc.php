@@ -31,7 +31,17 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	/** @var bool */
 	var $_globallyEnabled;
 
+	/** @var object */
+	var $_plugin;
+
+	var $_shibbolethOptionalTitle;
+
+	var $_shibbolethOptionalButtonLabel;
+
+	var $_shibbolethOptionalDescription;
+
 	var $settingsRequired = ["shibbolethWayfUrl", "shibbolethHeaderUin", "shibbolethHeaderFirstName", "shibbolethHeaderEmail"];
+
 	/**
 	 * @copydoc Plugin::__construct()
 	 */
