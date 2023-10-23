@@ -203,7 +203,7 @@ class ShibbolethHandler extends Handler {
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function registerUser($args, $request) {
-		return $this->register($request);
+		return $this->register($args, $request);
 	}
 
 	/**
