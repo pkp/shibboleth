@@ -3,9 +3,9 @@
 /**
  * @file plugins/generic/shibboleth/pages/ShibbolethHandler.inc.php
  *
- * Copyright (c) 2014-2019 Simon Fraser University
- * Copyright (c) 2003-2019 John Willinsky
- * Distributed under the GNU GPL v2 or later. For full terms see the file docs/COPYING.
+ * Copyright (c) 2014-2023 Simon Fraser University
+ * Copyright (c) 2003-2023 John Willinsky
+ * Distributed under the GNU GPL v3 or later. For full terms see the file docs/COPYING.
  *
  * @class ShibbolethHandler
  * @ingroup plugins_generic_shibboleth
@@ -21,6 +21,16 @@ class ShibbolethHandler extends Handler {
 
 	/** @var int */
 	var $_contextId;
+
+	/** @var bool */
+	var $_shibbolethOptional;
+
+	/** @var string */
+	var $_shibbolethOptionalTitle;
+	/** @var string */
+	var $_shibbolethOptionalButtonLabel;
+	/** @var string */
+	var $_shibbolethOptionalDescription;
 
 	/**
 	* Intercept normal login/registration requests; defer to Shibboleth.
@@ -74,9 +84,6 @@ class ShibbolethHandler extends Handler {
 				$request->redirectSSL();
 			}
 
-			$sessionManager = SessionManager::getManager();
-			$session = $sessionManager->getUserSession();
-
 			$templateMgr = TemplateManager::getManager($request);
 			$templateMgr->assign(array(
 				'loginMessage' => $request->getUserVar('loginMessage'),
@@ -99,9 +106,19 @@ class ShibbolethHandler extends Handler {
 	}
 
 	/**
+	 * Send the user "home" (typically to the dashboard, but that may not
+	 * always be available).
+	 * @param $request PKPRequest
+	 */
+	protected function sendHome($request) {
+		if ($request->getContext()) $request->redirect(null, 'submissions');
+		else $request->redirect(null, 'user');
+	}
+
+	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
-	function lostPassword($args, $request) {	                
+	function lostPassword($args, $request) {
 		return $this->_shibbolethRedirect($request);
 	}
 
@@ -193,7 +210,7 @@ class ShibbolethHandler extends Handler {
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function registerUser($args, $request) {
-		return $this->register($request);
+		return $this->register($args, $request);
 	}
 
 	/**
@@ -202,7 +219,7 @@ class ShibbolethHandler extends Handler {
 	function requestResetPassword($args, $request) {
 		return $this->_shibbolethRedirect($request);
 	}
-                                                                                              
+
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
@@ -261,7 +278,7 @@ class ShibbolethHandler extends Handler {
 		$userDao = DAORegistry::getDAO('UserDAO');
 		$user = $userDao->getUserByAuthStr($uin, true);
 		if (isset($user)) {
-			syslog(LOG_INFO, "Shibboleth located returning user $uin");
+			error_log(LOG_INFO, "Shibboleth located returning user $uin");
 		} else {
 			// We use the e-mail as a key.
 			if (empty($userEmail)) {
@@ -275,7 +292,7 @@ class ShibbolethHandler extends Handler {
 			$user = $userDao->getUserByEmail($userEmail);
 
 			if (isset($user)) {
-				syslog(LOG_INFO, "Shibboleth located returning email $userEmail");
+				error_log(LOG_INFO, "Shibboleth located returning email $userEmail");
 
 				if ($user->getAuthStr() != "") {
 					error_log(
@@ -326,53 +343,54 @@ class ShibbolethHandler extends Handler {
 			'shibbolethOptional'
 		);
 
-		if ( $this->_shibbolethOptional ) {
-		/**
-		 * This section is based off the code found in
-		 * pkp-lib's LoginHandler.inc.php
-		 * https://github.com/pkp/pkp-lib/blob/f64f302f8bef4f6c2e40275af717884c643f995b/pages/login/LoginHandler.inc.php#L90-L133
-		 */
-		$this->setupTemplate($request);
-		if (Validation::isLoggedIn()) $this->sendHome($request);
+		if ($this->_shibbolethOptional) {
+			/**
+			 * This section is based off the code found in
+			 * pkp-lib's LoginHandler.inc.php
+			 * https://github.com/pkp/pkp-lib/blob/f64f302f8bef4f6c2e40275af717884c643f995b/pages/login/LoginHandler.inc.php#L90-L133
+			 */
+			$this->setupTemplate($request);
+			if (Validation::isLoggedIn()) $this->sendHome($request);
 
-		if (Config::getVar('security', 'force_login_ssl') && $request->getProtocol() != 'https') {
-			// Force SSL connections for login
-			$request->redirectSSL();
-		}
-
-		$user = Validation::login($request->getUserVar('username'), $request->getUserVar('password'), $reason, $request->getUserVar('remember') == null ? false : true);
-		if ($user !== false) {
-		if ($user->getMustChangePassword()) {
-				// User must change their password in order to log in
-				Validation::logout();
-				$request->redirect(null, null, 'changePassword', $user->getUsername());
-			} else {
-				$source = $request->getUserVar('source');
-				$redirectNonSsl = Config::getVar('security', 'force_login_ssl') && !Config::getVar('security', 'force_ssl');
-				if (preg_match('#^/\w#', $source) === 1) {
-					$request->redirectUrl($source);
-				}
-				if ($redirectNonSsl) {
-					$request->redirectNonSSL();
-				} else {
-					$this->_redirectAfterLogin($request);
-				}
+			if (Config::getVar('security', 'force_login_ssl') && $request->getProtocol() != 'https') {
+				// Force SSL connections for login
+				$request->redirectSSL();
 			}
-		} else {
-			$templateMgr = TemplateManager::getManager($request);
-			$templateMgr->assign(array(
-				'username' => $request->getUserVar('username'),
-				'remember' => $request->getUserVar('remember'),
-				'source' => $request->getUserVar('source'),
-				'showRemember' => Config::getVar('general', 'session_lifetime') > 0,
-				'error' => $reason===null?'user.login.loginError':($reason===''?'user.login.accountDisabled':'user.login.accountDisabledWithReason'),
-				'reason' => $reason,
-			));
-			$templateMgr->display('frontend/pages/userLogin.tpl');
+
+			$user = Validation::login($request->getUserVar('username'), $request->getUserVar('password'), $reason, $request->getUserVar('remember') == null ? false : true);
+			if ($user !== false) {
+			if ($user->getMustChangePassword()) {
+					// User must change their password in order to log in
+					Validation::logout();
+					$request->redirect(null, null, 'changePassword', $user->getUsername());
+				} else {
+					$source = $request->getUserVar('source');
+					$redirectNonSsl = Config::getVar('security', 'force_login_ssl') && !Config::getVar('security', 'force_ssl');
+					if (preg_match('#^/\w#', $source) === 1) {
+						$request->redirectUrl($source);
+					}
+					if ($redirectNonSsl) {
+						$request->redirectNonSSL();
+					} else {
+						$this->_redirectAfterLogin($request);
+					}
+				}
+			} else {
+				$templateMgr = TemplateManager::getManager($request);
+				$templateMgr->assign(array(
+					'username' => $request->getUserVar('username'),
+					'remember' => $request->getUserVar('remember'),
+					'source' => $request->getUserVar('source'),
+					'showRemember' => Config::getVar('general', 'session_lifetime') > 0,
+					'error' => $reason===null?'user.login.loginError':($reason===''?'user.login.accountDisabled':'user.login.accountDisabledWithReason'),
+					'reason' => $reason,
+				));
+				$templateMgr->display('frontend/pages/userLogin.tpl');
+			}
+			return;
 		}
+		return $this->_shibbolethRedirect($request);
 	}
-	return $this->_shibbolethRedirect($request);
-}
 
 	/**
 	 * Intercept normal logout; redirect to context home page instead
@@ -398,11 +416,7 @@ class ShibbolethHandler extends Handler {
 	 */
 	function validate($requiredContexts = null, $request = null) {
 		import('lib.pkp.pages.user.RegistrationHandler');
-		if ( True ) {
-			return RegistrationHandler::validate($requiredContexts, $request);
-		} else {
-			return $this->_shibbolethRedirect($request);
-		}
+		return RegistrationHandler::validate($requiredContexts, $request);
 	}
 
 
@@ -538,7 +552,7 @@ class ShibbolethHandler extends Handler {
 		$uin = $_SERVER[$uinHeader];
 		$userEmail = $_SERVER[$emailHeader];
 		$userFirstName = $_SERVER[$firstNameHeader];
-		
+
 
 		if (empty($uin) || empty($userEmail) || empty($userFirstName)) {
 			error_log("Shibboleth failed to find required fields for new user");
@@ -563,7 +577,7 @@ class ShibbolethHandler extends Handler {
 		$sitePrimaryLocale = $site->getPrimaryLocale();
 
 		$user->setGivenName($userFirstName, $sitePrimaryLocale);
-		
+
 		if (!empty($userLastName)) {
 			$user->setFamilyName($userLastName, $sitePrimaryLocale);
 		}
@@ -575,8 +589,8 @@ class ShibbolethHandler extends Handler {
 		}
 		if (!empty($userMailing)) {
 			$user->setMailingAddress($userMailing);
-		}		
-		
+		}
+
 
 		$user->setDateRegistered(Core::getCurrentDate());
 		$user->setPassword(
@@ -598,7 +612,7 @@ class ShibbolethHandler extends Handler {
 	/**
 	 * Intercept normal login/registration requests; defer to Shibboleth.
 	 *
-	 * @param $request Request
+	 * @param Request $request
 	 * @return bool
 	 */
 	function _shibbolethRedirect($request) {

@@ -39,4 +39,4 @@ You must be the site administrator in order to enable or configure this plugin. 
 
 ## License
 
-Released under a license of GPL v2 or later.
+Released under a license of GPL v3.

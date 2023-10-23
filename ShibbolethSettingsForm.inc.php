@@ -3,9 +3,9 @@
 /**
  * @file plugins/generic/shibboleth/ShibbolethSettingsForm.inc.php
  *
- * Copyright (c) 2014-2019 Simon Fraser University
- * Copyright (c) 2003-2019 John Willinsky
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ * Copyright (c) 2014-2023 Simon Fraser University
+ * Copyright (c) 2003-2023 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class ShibbolethSettingsForm
  * @ingroup plugins_generic_shibboleth
@@ -104,7 +104,7 @@ class ShibbolethSettingsForm extends Form {
 	/**
 	 * Save settings.
 	 */
-	function execute() {
+	function execute(...$functionArgs) {
 		$this->_plugin->updateSetting(
 			$this->_contextId,
 			'shibbolethWayfUrl',
@@ -189,5 +189,6 @@ class ShibbolethSettingsForm extends Form {
 			$this->getData('shibbolethOptionalRegistrationDescription'),
 			'string'
 		);
+		return parent::execute(...$functionArgs);
 	}
 }

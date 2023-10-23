@@ -1,9 +1,9 @@
 {**
  * plugins/generic/shibboleth/templates/settingsForm.tpl
  *
- * Copyright (c) 2014-2019 Simon Fraser University
- * Copyright (c) 2003-2019 John Willinsky
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ * Copyright (c) 2014-2023 Simon Fraser University
+ * Copyright (c) 2003-2023 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * Shibboleth Authentication plugin settings
  *
@@ -33,7 +33,7 @@
 		{fbvElement id="shibbolethAdminUinsSetting" type="text" name="shibbolethAdminUins" value=$shibbolethAdminUins label="plugins.generic.shibboleth.manager.settings.shibbolethAdminUins"}
 	{/fbvFormArea}
 
-	{fbvFormArea title="plugins.generic.shibboleth.manager.settings.shibbolethOptional"}
+	{fbvFormArea id="shibbolethOptionalSettingsFormArea" title="plugins.generic.shibboleth.manager.settings.shibbolethOptional"}
 		{fbvFormSection for="shibbolethOptionalSetting" list=true description="plugins.generic.shibboleth.manager.settings.shibbolethOptionalDescription"}
 			{fbvElement id="shibbolethOptional" type="checkbox" value="1" checked=$shibbolethOptional label="plugins.generic.shibboleth.manager.settings.shibbolethOptionalLabel"}
 		{/fbvFormSection}
