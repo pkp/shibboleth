@@ -109,6 +109,16 @@ class ShibbolethHandler extends Handler {
 	}
 
 	/**
+	 * Send the user "home" (typically to the dashboard, but that may not
+	 * always be available).
+	 * @param $request PKPRequest
+	 */
+	protected function sendHome($request) {
+		if ($request->getContext()) $request->redirect(null, 'submissions');
+		else $request->redirect(null, 'user');
+	}
+
+	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
 	function lostPassword($args, $request) {	                
