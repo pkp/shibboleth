@@ -216,68 +216,51 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 		return $this->getSetting($this->_contextId, 'enabled');
 	}
 
-        /**
-         * @copydoc Plugin::isShibbolethConfigured()
-         * Determine whether or not this plugin is currently configured.
-         * @return boolean
-         */
-        function isShibbolethConfigured() {
+	/**
+	 * @copydoc Plugin::isShibbolethConfigured()
+	 * Determine whether or not this plugin is currently configured.
+	 * @return boolean
+	 */
+	function isShibbolethConfigured() {
 		foreach ($this->settingsRequired as $setting){
 			if ($this->getSetting($this->_contextId, $setting) == null) {
 				return false;
 			}
 		}
 		return true;
-        }
+	}
 
 	//
 	// Callback handler
-	// 
+	//
 	/**
 	 * Hook callback: register pages for each login method.
 	 * This URL is of the form: shibboleth/{$shibrequest}
 	 * @see PKPPageRouter::route()
 	 */
 	function handleRequest($hookName, $params) {
-		$page = $params[0];
-		$op = $params[1];
-		
-		// modify user login
-		$loginOps = ['index', 'signIn', 'signOut'];
-		if (!$this->_isShibbolethOptional()) {
-			// If Shibboleth is required, override password functionality
-			$loginOps = array_merge($loginOps, ['changePassword', 'lostPassword', 'requestResetPassword', 'savePassword']);
+		[$page, $op] = $params;
+
+		$pageOperationMap = [
+			'shibboleth' => [$op],
+			'login' => array_merge(
+				['index', 'signIn', 'signOut'],
+				// If Shibboleth is required, also override the password functionality
+				$this->_isShibbolethOptional() ? [] : ['changePassword', 'lostPassword', 'requestResetPassword', 'savePassword']
+			),
+			'user' => ['activateUser', 'register', 'registerUser', 'validate']
+		];
+		if (!$this->getEnabled() || !array_search($op, $pageOperationMap[$page] ?? [])) {
+			return false;
 		}
-		
-		if ($this->getEnabled()
-			&& ($page == 'shibboleth'
-				|| ($page == 'login'
-					&& array_search(
-						$op,
-						$loginOps
-					))
-				|| ($page == 'user'
-					&& array_search(
-						$op,
-						array(
-							'activateUser',
-							'register',
-							'registerUser',
-							'validate',
-						)
-					)
-				)
-			)
-		) {
-			$this->import('pages/ShibbolethHandler');
-			define('HANDLER_CLASS', 'ShibbolethHandler');
-			return true;
-		}
-		return false;
+
+		$this->import('pages/ShibbolethHandler');
+		define('HANDLER_CLASS', 'ShibbolethHandler');
+		return true;
 	}
 
 	/**
-	 * Hook callback: register output filter for user registration 
+	 * Hook callback: register output filter for user registration
 	 *
 	 * @param $hookName string
 	 * @param $args array
@@ -286,31 +269,18 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	 *
 	 */
 	function handleTemplateDisplay($hookName, $args) {
+		/** @var TemplateManager */
 		$templateMgr =& $args[0];
 		$template =& $args[1];
-		$request = PKPApplication::get()->getRequest();
 
-		switch ($template) {
-			case 'frontend/pages/userRegister.tpl':
-				$templateMgr->registerFilter("output", array($this, 'registrationFilter'));
-				break;
-			case 'frontend/pages/userLogin.tpl':
-				$templateMgr->registerFilter("output", array($this, 'loginFilter'));
-				break;
+		if (in_array($template, ['frontend/pages/userRegister.tpl', 'frontend/pages/userLogin.tpl'])) {
+			$templateMgr->registerFilter("output", function ($output, $templateMgr) use ($template) {
+				return $this->registrationAndLoginFilter($output, $templateMgr, $template === 'frontend/pages/userRegister.tpl');
+			});
 		}
 		return false;
 	}
-	
-	function registrationFilter($output, $templateMgr) {
-		$isRegistration = True;
-		return $this->registrationAndLoginFilter($output, $templateMgr, $isRegistration);
-	}
 
-	function loginFilter($output, $templateMgr) {
-		$isRegistration = False;
-		return $this::registrationAndLoginFilter($output, $templateMgr, $isRegistration);
-	}
-	
 	/**
 	 * Output filter adds Shibboleth interaction to registration and login form.
 	 *
@@ -320,11 +290,7 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	 * @return string
 	 */
 	function registrationAndLoginFilter($output, $templateMgr, $isRegistration) {
-		if ($isRegistration) {
-			$htmlId = "register";
-		} else {
-			$htmlId = "login";
-		}
+		$htmlId = $isRegistration ? "register" : "login";
 		if (preg_match('/<form[^>]+id="' . $htmlId . '"[^>]+>/', $output, $matches, PREG_OFFSET_CAPTURE)) {
 			$this->_plugin = $this->_getPlugin();
 			$this->_shibbolethOptionalTitle = $this->_plugin->getSetting(
@@ -335,17 +301,10 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 				$this->_contextId,
 				'shibbolethOptionalButtonLabel'
 			);
-			if ($isRegistration) {
-				$this->_shibbolethOptionalDescription = $this->_plugin->getSetting(
-					$this->_contextId,
-					'shibbolethOptionalRegistrationDescription'
-				);
-			} else {
-				$this->_shibbolethOptionalDescription = $this->_plugin->getSetting(
-					$this->_contextId,
-					'shibbolethOptionalLoginDescription'
-				);
-			}
+			$this->_shibbolethOptionalDescription = $this->_plugin->getSetting(
+				$this->_contextId,
+				$isRegistration ? 'shibbolethOptionalRegistrationDescription' : 'shibbolethOptionalLoginDescription'
+			);
 			$match = $matches[0][0];
 			$offset = $matches[0][1];
 			$request = Application::get()->getRequest();
@@ -371,7 +330,7 @@ class ShibbolethAuthPlugin extends GenericPlugin {
 	//
 	/**
 	 * Get the Shibboleth plugin object
-	 * 
+	 *
 	 * @return ShibbolethAuthPlugin
 	 */
 	function _getPlugin() {
