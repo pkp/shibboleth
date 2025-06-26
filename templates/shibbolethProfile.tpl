@@ -1,4 +1,15 @@
-<div>	
+{**
+ * plugins/generic/shibboleth/templates/shibbolethProfile.tpl
+ *
+ * Copyright (c) 2014-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ *
+ * Shibboleth Authentication plugin	template for the registration and login form.
+ *
+ *}
+
+<div>
 	<h2>
 		{if trim($shibbolethTitle) != ""}
 			{if $isRegistration}
