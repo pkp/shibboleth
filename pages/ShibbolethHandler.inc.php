@@ -5,7 +5,7 @@
  *
  * Copyright (c) 2014-2019 Simon Fraser University
  * Copyright (c) 2003-2019 John Willinsky
- * Distributed under the GNU GPL v2 or later. For full terms see the file docs/COPYING.
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class ShibbolethHandler
  * @ingroup plugins_generic_shibboleth
@@ -101,7 +101,7 @@ class ShibbolethHandler extends Handler {
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
-	function lostPassword($args, $request) {	                
+	function lostPassword($args, $request) {
 		return $this->_shibbolethRedirect($request);
 	}
 
@@ -202,7 +202,7 @@ class ShibbolethHandler extends Handler {
 	function requestResetPassword($args, $request) {
 		return $this->_shibbolethRedirect($request);
 	}
-                                                                                              
+
 	/**
 	 * @copydoc ShibbolethHandler::activateUser()
 	 */
@@ -538,7 +538,7 @@ class ShibbolethHandler extends Handler {
 		$uin = $_SERVER[$uinHeader];
 		$userEmail = $_SERVER[$emailHeader];
 		$userFirstName = $_SERVER[$firstNameHeader];
-		
+
 
 		if (empty($uin) || empty($userEmail) || empty($userFirstName)) {
 			error_log("Shibboleth failed to find required fields for new user");
@@ -563,7 +563,7 @@ class ShibbolethHandler extends Handler {
 		$sitePrimaryLocale = $site->getPrimaryLocale();
 
 		$user->setGivenName($userFirstName, $sitePrimaryLocale);
-		
+
 		if (!empty($userLastName)) {
 			$user->setFamilyName($userLastName, $sitePrimaryLocale);
 		}
@@ -575,8 +575,8 @@ class ShibbolethHandler extends Handler {
 		}
 		if (!empty($userMailing)) {
 			$user->setMailingAddress($userMailing);
-		}		
-		
+		}
+
 
 		$user->setDateRegistered(Core::getCurrentDate());
 		$user->setPassword(
